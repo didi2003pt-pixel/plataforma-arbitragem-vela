@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#071f36" />
+  <meta name="color-scheme" content="light" />
+  <meta name="description" content="Plataforma operacional interna para gestão da arbitragem da Federação Portuguesa de Vela." />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="FPV Arb" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="manifest" href="./manifest.json?v=2.1.1" />
+  <link rel="apple-touch-icon" href="./icons/icon-192.png" />
+  <link rel="icon" href="./icons/icon-192.png" />
+  <link rel="stylesheet" href="./styles.css?v=2.1.1" />
+  <title>FPV Arbitragem | Plataforma de Gestão</title>
+</head>
+<body>
+  <a class="skip-link" href="#main">Saltar para o conteúdo</a>
+
+  <div class="mobile-bar">
+    <button id="mobileMenuBtn" class="btn btn-ghost" type="button" aria-label="Abrir menu">☰ Menu</button>
+    <strong>FPV Arbitragem</strong>
+  </div>
+  <div id="overlay" class="overlay" hidden></div>
+
+  <div class="app-shell">
+    <aside id="sidebar" class="sidebar" aria-label="Navegação principal">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">FPV</div>
+        <div>
+          <h1>Plataforma de Gestão da Arbitragem</h1>
+          <p>Ambiente interno</p>
+        </div>
+      </div>
+      <nav id="mainNav" class="nav"></nav>
+      <div class="session-card">
+        <small>Sessão institucional</small>
+        <div class="session-user">
+          <span class="avatar">CA</span>
+          <span><strong>Conselho de Arbitragem</strong><br><small>Gestão interna</small></span>
+        </div>
+      </div>
+    </aside>
+
+    <main id="main" class="main" tabindex="-1">
+      <header class="page-header">
+        <div>
+          <span id="pageEyebrow" class="eyebrow">Operação</span>
+          <h2 id="pageTitle">Dashboard</h2>
+          <p id="pageSubtitle">Visão global da gestão operacional da arbitragem.</p>
+        </div>
+        <div id="pageActions" class="page-actions"></div>
+      </header>
+
+      <section id="dashboard" class="section active" aria-labelledby="pageTitle"></section>
+      <section id="arbitros" class="section" aria-labelledby="pageTitle"></section>
+      <section id="perfil" class="section" aria-labelledby="pageTitle"></section>
+      <section id="provas" class="section" aria-labelledby="pageTitle"></section>
+      <section id="nomeacoes" class="section" aria-labelledby="pageTitle"></section>
+      <section id="disponibilidades" class="section" aria-labelledby="pageTitle"></section>
+      <section id="credenciacao" class="section" aria-labelledby="pageTitle"></section>
+      <section id="relatorios" class="section" aria-labelledby="pageTitle"></section>
+      <section id="conflitos" class="section" aria-labelledby="pageTitle"></section>
+      <section id="documentos" class="section" aria-labelledby="pageTitle"></section>
+      <section id="comunicacoes" class="section" aria-labelledby="pageTitle"></section>
+      <section id="auditoria" class="section" aria-labelledby="pageTitle"></section>
+      <section id="perfis" class="section" aria-labelledby="pageTitle"></section>
+    </main>
+  </div>
+
+  <div id="modalRoot" class="modal-backdrop" hidden aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <header class="modal-header">
+        <h3 id="modalTitle">Informação</h3>
+        <button id="modalCloseBtn" class="icon-btn" type="button" aria-label="Fechar janela">✕</button>
+      </header>
+      <div id="modalBody" class="modal-body"></div>
+      <footer id="modalActions" class="modal-actions"></footer>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="./app.js?v=2.1.1" defer></script>
+</body>
+</html>
