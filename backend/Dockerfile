@@ -8,7 +8,7 @@ RUN test -n "$SOURCE_GATEWAY_URL" && test -n "$SOURCE_GATEWAY_TOKEN" \
       -H "Authorization: Bearer $SOURCE_GATEWAY_TOKEN" \
       "$SOURCE_GATEWAY_URL/artifact/backend.zip" \
       -o /tmp/backend.zip \
- && unzip -q /tmp/backend.zip -d /app
+ && (unzip -q /tmp/backend.zip -d /app || [ "$?" -eq 1 ])
 RUN npm install --no-audit --no-fund
 
 FROM deps AS build
