@@ -2,14 +2,13 @@ FROM node:22-alpine AS deps
 ARG SOURCE_GATEWAY_URL
 ARG SOURCE_GATEWAY_TOKEN
 WORKDIR /app
-RUN apk add --no-cache curl tar gzip python3 make g++
+RUN apk add --no-cache curl unzip python3 make g++
 RUN test -n "$SOURCE_GATEWAY_URL" && test -n "$SOURCE_GATEWAY_TOKEN" \
  && curl --fail --silent --show-error \
       -H "Authorization: Bearer $SOURCE_GATEWAY_TOKEN" \
-      "$SOURCE_GATEWAY_URL/artifact/backend.tar.gz" \
-      -o /tmp/backend.tar.gz \
- && tar -xzf /tmp/backend.tar.gz -C /tmp \
- && cp -a /tmp/backend/. /app/
+      "$SOURCE_GATEWAY_URL/artifact/backend.zip" \
+      -o /tmp/backend.zip \
+ && unzip -q /tmp/backend.zip -d /app
 RUN npm install --no-audit --no-fund
 
 FROM deps AS build
