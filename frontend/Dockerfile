@@ -3,13 +3,8 @@ ARG SOURCE_GATEWAY_URL
 ARG SOURCE_GATEWAY_TOKEN
 RUN apk add --no-cache curl unzip python3
 WORKDIR /src
-RUN test -n "$SOURCE_GATEWAY_URL" && test -n "$SOURCE_GATEWAY_TOKEN" \
- && curl --fail --silent --show-error \
-      -H "Authorization: Bearer $SOURCE_GATEWAY_TOKEN" \
-      "$SOURCE_GATEWAY_URL/artifact/frontend.zip" \
-      -o /tmp/frontend.zip \
- && mkdir -p /src/frontend \
- && (unzip -q /tmp/frontend.zip -d /src/frontend || [ "$?" -eq 1 ])
+COPY patches/fetch-source.sh /tmp/fetch-source.sh
+RUN chmod 0755 /tmp/fetch-source.sh && /tmp/fetch-source.sh
 COPY patches/mobile-fix.css /tmp/mobile-fix.css
 COPY patches/mobile-fix.js /tmp/mobile-fix.js
 COPY patches/apply-mobile1.py /tmp/apply-mobile1.py
