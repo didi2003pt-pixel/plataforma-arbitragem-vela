@@ -1,7 +1,7 @@
 FROM alpine:3.20 AS fetch
 ARG SOURCE_GATEWAY_URL
 ARG SOURCE_GATEWAY_TOKEN
-RUN apk add --no-cache curl unzip
+RUN apk add --no-cache curl unzip python3
 WORKDIR /src
 RUN test -n "$SOURCE_GATEWAY_URL" && test -n "$SOURCE_GATEWAY_TOKEN" \
  && curl --fail --silent --show-error \
@@ -10,6 +10,12 @@ RUN test -n "$SOURCE_GATEWAY_URL" && test -n "$SOURCE_GATEWAY_TOKEN" \
       -o /tmp/frontend.zip \
  && mkdir -p /src/frontend \
  && (unzip -q /tmp/frontend.zip -d /src/frontend || [ "$?" -eq 1 ])
+COPY patches/mobile-fix.css /tmp/mobile-fix.css
+COPY patches/mobile-fix.js /tmp/mobile-fix.js
+COPY patches/apply-mobile1.py /tmp/apply-mobile1.py
+RUN cp /tmp/mobile-fix.css /src/frontend/mobile-fix.css \
+ && cp /tmp/mobile-fix.js /src/frontend/mobile-fix.js \
+ && python3 /tmp/apply-mobile1.py /src/frontend
 
 FROM nginx:1.27-alpine
 COPY --from=fetch /src/frontend/ /usr/share/nginx/html/
