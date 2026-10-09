@@ -1,0 +1,415 @@
+/* FPV Arbitragem — MOBILE1
+   Correção transversal de layout mobile para todos os perfis.
+   Apenas apresentação; não altera regras de negócio, permissões ou dados. */
+
+@media (max-width: 860px) {
+  html,
+  body {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .mobile-bar {
+    min-height: 64px;
+    padding: 10px 12px;
+    gap: 12px;
+    z-index: 80;
+  }
+
+  .mobile-bar .btn,
+  .mobile-bar .button {
+    min-height: 42px;
+    padding: 8px 12px;
+  }
+
+  .app-shell,
+  .main,
+  .section,
+  .view,
+  .grid,
+  .card,
+  .profile-box,
+  .panel,
+  .toolbar,
+  .filters,
+  .row-actions {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .app-shell {
+    width: 100%;
+    overflow-x: clip;
+  }
+
+  /* O drawer começa abaixo da barra mobile, em vez de ficar escondido atrás dela. */
+  .sidebar {
+    top: 64px;
+    width: min(82vw, 320px);
+    max-width: calc(100vw - 24px);
+    height: calc(100dvh - 64px);
+    padding: 12px 12px calc(12px + env(safe-area-inset-bottom));
+    gap: 10px;
+    overflow: hidden;
+    z-index: 70;
+  }
+
+  .overlay,
+  .sidebar-overlay {
+    top: 64px;
+  }
+
+  .sidebar .brand {
+    flex: 0 0 auto;
+    gap: 10px;
+    padding: 4px 4px 10px;
+  }
+
+  .sidebar .brand-mark,
+  .sidebar .brand-logo {
+    width: 44px;
+    height: 44px;
+    flex: 0 0 44px;
+  }
+
+  .sidebar .brand h1 {
+    font-size: .94rem;
+    line-height: 1.12;
+  }
+
+  .sidebar .brand p {
+    margin-top: 3px;
+    font-size: .74rem;
+  }
+
+  .sidebar .nav {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    padding-right: 2px;
+  }
+
+  .sidebar .nav::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .sidebar .nav::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .sidebar .nav::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, .24);
+    border-radius: 999px;
+  }
+
+  .sidebar .nav button {
+    min-height: 40px;
+    padding: 8px 10px;
+  }
+
+  .sidebar .nav-icon {
+    width: 26px;
+    height: 26px;
+  }
+
+  .sidebar .session-card,
+  .sidebar .sidebar-footer {
+    flex: 0 0 auto;
+    margin-top: 0;
+    padding: 10px;
+    border-radius: 14px;
+  }
+
+  .sidebar .session-user {
+    gap: 8px;
+    margin-top: 6px;
+    min-width: 0;
+  }
+
+  .sidebar .session-user > span:last-child,
+  .sidebar .session-card strong,
+  .sidebar .sidebar-footer strong {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .sidebar .avatar {
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+  }
+
+  .sidebar .session-card .btn,
+  .sidebar .session-card .button,
+  .sidebar .sidebar-footer .btn,
+  .sidebar .sidebar-footer .button {
+    width: 100%;
+    min-height: 40px;
+    margin-top: 8px;
+    padding: 8px 10px;
+  }
+
+  .main {
+    width: 100%;
+    overflow-x: hidden;
+    padding: 14px calc(12px + env(safe-area-inset-right)) calc(20px + env(safe-area-inset-bottom)) calc(12px + env(safe-area-inset-left));
+  }
+
+  .page-header {
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .page-header > div {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .page-header h2 {
+    font-size: clamp(1.48rem, 7vw, 1.82rem);
+    overflow-wrap: anywhere;
+  }
+
+  .page-header p {
+    margin-top: 6px;
+    line-height: 1.4;
+  }
+
+  .page-actions,
+  .header-actions {
+    width: 100%;
+    gap: 8px;
+    justify-content: flex-start;
+  }
+
+  .page-actions .btn,
+  .page-actions .button,
+  .header-actions .btn,
+  .header-actions .button {
+    flex: 1 1 140px;
+    max-width: 100%;
+    white-space: normal;
+  }
+
+  .card,
+  .profile-box {
+    padding: 15px;
+  }
+
+  .panel {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .panel h3,
+  .row-title,
+  .entity-card h4 {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .toolbar {
+    gap: 8px;
+  }
+
+  .filters {
+    flex: 1 1 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .filters .input,
+  .filters .select {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .row-actions {
+    gap: 6px;
+  }
+
+  .row-actions .btn,
+  .row-actions .button,
+  .row-actions .mini {
+    flex: 1 1 132px;
+    max-width: 100%;
+    white-space: normal;
+  }
+
+  .badge {
+    max-width: 100%;
+    white-space: normal;
+    text-align: center;
+    overflow-wrap: anywhere;
+  }
+
+  .kpi-grid {
+    gap: 10px;
+  }
+
+  .kpi,
+  .kpi-card {
+    min-height: 108px;
+  }
+
+  .kpi .value,
+  .kpi-value {
+    font-size: 1.72rem;
+  }
+
+  .two-col,
+  .three-col,
+  .four-col,
+  .profile-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .table-wrap {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-inline: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+
+  /* As tabelas que já têm cartões mobile próprios continuam escondidas no mobile. */
+  .table-wrap.desktop-table {
+    display: none;
+  }
+
+  .entity-card,
+  .item {
+    min-width: 0;
+  }
+
+  .card-row {
+    gap: 8px;
+  }
+
+  .card-row strong {
+    min-width: 0;
+    max-width: 62%;
+    text-align: right;
+    overflow-wrap: anywhere;
+  }
+
+  .modal,
+  .modal-card {
+    max-width: 100vw;
+  }
+
+  .modal-body {
+    overflow-x: hidden;
+  }
+}
+
+
+@media (max-width: 640px) {
+  /* Fallback para tabelas das extensões/admin que não têm cartões mobile próprios. */
+  .table-wrap:not(.desktop-table):not(.bogolab-table) table.mobile-stack-ready {
+    min-width: 0;
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  .table-wrap:not(.desktop-table):not(.bogolab-table) table.mobile-stack-ready thead {
+    display: none;
+  }
+
+  .table-wrap:not(.desktop-table):not(.bogolab-table) table.mobile-stack-ready tbody,
+  .table-wrap:not(.desktop-table):not(.bogolab-table) table.mobile-stack-ready tr,
+  .table-wrap:not(.desktop-table):not(.bogolab-table) table.mobile-stack-ready td {
+    display: block;
+    width: 100%;
+  }
+
+  .table-wrap:not(.desktop-table):not(.bogolab-table) table.mobile-stack-ready tr {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .table-wrap:not(.desktop-table):not(.bogolab-table) table.mobile-stack-ready tr:last-child {
+    border-bottom: 0;
+  }
+
+  .table-wrap:not(.desktop-table):not(.bogolab-table) table.mobile-stack-ready td {
+    display: grid;
+    grid-template-columns: minmax(104px, 38%) minmax(0, 1fr);
+    gap: 10px;
+    align-items: start;
+    padding: 8px 12px;
+    border-bottom: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .table-wrap:not(.desktop-table):not(.bogolab-table) table.mobile-stack-ready td::before {
+    content: attr(data-label);
+    color: var(--navy);
+    font-size: .75rem;
+    font-weight: 900;
+    line-height: 1.3;
+    text-transform: uppercase;
+    letter-spacing: .02em;
+  }
+
+  .table-wrap:not(.desktop-table):not(.bogolab-table) table.mobile-stack-ready td[colspan] {
+    display: block;
+  }
+
+  .table-wrap:not(.desktop-table):not(.bogolab-table) table.mobile-stack-ready td[colspan]::before {
+    content: none;
+  }
+
+
+}
+
+@media (max-width: 540px) {
+  .mobile-bar {
+    min-height: 60px;
+  }
+
+  .sidebar {
+    top: 60px;
+    width: min(84vw, 306px);
+    height: calc(100dvh - 60px);
+  }
+
+  .overlay,
+  .sidebar-overlay {
+    top: 60px;
+  }
+
+  .main {
+    padding-top: 12px;
+  }
+
+  .card,
+  .profile-box {
+    padding: 13px;
+  }
+
+  .kpi-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .table-wrap:not(.desktop-table):not(.bogolab-table) table.mobile-stack-ready td {
+    grid-template-columns: minmax(92px, 36%) minmax(0, 1fr);
+    gap: 8px;
+    padding: 8px 10px;
+  }
+
+  .modal-actions .btn,
+  .modal-actions .button {
+    width: 100%;
+  }
+}
