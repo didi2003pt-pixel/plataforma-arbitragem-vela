@@ -3,12 +3,8 @@ ARG SOURCE_GATEWAY_URL
 ARG SOURCE_GATEWAY_TOKEN
 WORKDIR /app
 RUN apk add --no-cache curl unzip python3 make g++
-RUN test -n "$SOURCE_GATEWAY_URL" && test -n "$SOURCE_GATEWAY_TOKEN" \
- && curl --fail --silent --show-error \
-      -H "Authorization: Bearer $SOURCE_GATEWAY_TOKEN" \
-      "$SOURCE_GATEWAY_URL/artifact/backend.zip" \
-      -o /tmp/backend.zip \
- && (unzip -q /tmp/backend.zip -d /app || [ "$?" -eq 1 ])
+COPY patches/fetch-source.sh /tmp/fetch-source.sh
+RUN chmod 0755 /tmp/fetch-source.sh && /tmp/fetch-source.sh
 COPY patches/mail.service.ts /tmp/mail.service.ts
 RUN cp /tmp/mail.service.ts /app/src/notifications/mail.service.ts
 COPY patches/apply-reg01.py /tmp/apply-reg01.py
