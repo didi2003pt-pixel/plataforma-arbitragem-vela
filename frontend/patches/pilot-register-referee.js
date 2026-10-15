@@ -30,32 +30,10 @@ renderUsers = async function (root, actions) {
 
 async function openPilotRegisterReferee(inviteByDefault = true) {
   try {
-    const regions = await api.get('/referees/registration-options');
-    if (!regions.length) {
-      if (!['FPV_ADMIN', 'ADMIN'].includes(ui.user?.role)) {
-        toast('Ainda não existem regiões ativas. Peça a um Administrador FPV que configure a primeira região antes do registo.', true);
-        return;
-      }
-      openSimpleForm('Configurar primeira região',
-        '<p class="offline-note full">É necessário criar uma região institucional antes de registar árbitros. Utilize apenas o nome e o código confirmados pela FPV; não use regiões de demonstração.</p>' +
-        '<div class="field full"><label>Nome oficial da região</label><input class="input" name="name" minlength="3" maxlength="120" required></div>' +
-        '<div class="field full"><label>Código oficial / interno da região</label><input class="input" name="code" minlength="2" maxlength="24" pattern="[A-Za-z0-9_-]+" required placeholder="Código confirmado pela FPV"></div>',
-        async f => {
-          await api.post('/referees/registration-region', { name: f.name.trim(), code: f.code.trim().toUpperCase() });
-          toast('Região configurada. Já pode registar o primeiro árbitro.');
-          await openPilotRegisterReferee(inviteByDefault);
-        }
-      );
-      return;
-    }
-    const regionOptions = regions.map(r =>
-      '<option value="' + escAttr(r.id) + '">' + esc(r.name) + '</option>'
-    ).join('');
     openSimpleForm('Registar árbitro',
       '<p class="offline-note full">O registo cria a ficha administrativa, mas não valida licença, categoria nem graduação. O código interno é gerado automaticamente.</p>' +
       '<div class="field full"><label>Nome completo</label><input class="input" name="name" minlength="3" maxlength="160" autocomplete="name" required></div>' +
       '<div class="field full"><label>E-mail</label><input class="input" type="email" name="email" maxlength="254" autocomplete="email" required></div>' +
-      '<div class="field"><label>Região</label><select class="select" name="regionId" required><option value="">Selecione…</option>' + regionOptions + '</select></div>' +
       '<div class="field"><label>N.º licença desportiva (se conhecido)</label><input class="input" name="licenseNumber" maxlength="60"></div>' +
       '<div class="field full"><label>Telefone (opcional)</label><input class="input" name="phone" maxlength="50" autocomplete="tel"></div>' +
       '<label class="check-pill full"><input type="checkbox" name="sendInvite" value="true" ' + (inviteByDefault ? 'checked' : '') + '> Enviar convite para criar a conta</label>',
@@ -63,7 +41,6 @@ async function openPilotRegisterReferee(inviteByDefault = true) {
         const payload = {
           name: f.name.trim(),
           email: f.email.trim(),
-          regionId: f.regionId,
           ...(f.phone?.trim() ? { phone: f.phone.trim() } : {}),
           ...(f.licenseNumber?.trim() ? { licenseNumber: f.licenseNumber.trim() } : {})
         };
