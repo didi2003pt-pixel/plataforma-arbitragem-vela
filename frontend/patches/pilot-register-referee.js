@@ -14,26 +14,6 @@ renderReferees = async function (root) {
   button.textContent = 'Registar árbitro';
   button.onclick = () => openPilotRegisterReferee();
   actions.appendChild(button);
-  if (['ARBITRATION_ADMIN', 'NATIONAL_COUNCIL', 'FPV_ADMIN', 'ADMIN'].includes(ui.user?.role)) {
-    const fixButton = document.createElement('button');
-    fixButton.className = 'btn';
-    fixButton.type = 'button';
-    fixButton.textContent = 'Corrigir email de árbitro';
-    fixButton.onclick = () => openPilotCorrectRefereeEmail();
-    actions.appendChild(fixButton);
-  }
-};
-
-const _reg01RenderUsers = renderUsers;
-renderUsers = async function (root, actions) {
-  await _reg01RenderUsers(root, actions);
-  if (!['ARBITRATION_ADMIN', 'NATIONAL_COUNCIL', 'FPV_ADMIN', 'ADMIN'].includes(ui.user?.role)) return;
-  const button = document.createElement('button');
-  button.className = 'btn';
-  button.type = 'button';
-  button.textContent = 'Registar e convidar árbitro';
-  button.onclick = () => openPilotRegisterReferee(true);
-  actions.appendChild(button);
 };
 
 async function openPilotRegisterReferee(inviteByDefault = true) {
@@ -77,7 +57,7 @@ async function openPilotRegisterReferee(inviteByDefault = true) {
   }
 }
 
-async function openPilotCorrectRefereeEmail() {
+async function openPilotCorrectRefereeEmail(preselectId = '') {
   try {
     const refs = await api.get('/referees');
     if (!refs.length) {
@@ -85,7 +65,7 @@ async function openPilotCorrectRefereeEmail() {
       return;
     }
     const options = refs.map(r =>
-      '<option value="' + escAttr(r.id) + '">' + esc(r.name + ' — ' + r.email + ' (' + r.code + ')') + '</option>'
+      '<option value="' + escAttr(r.id) + '"' + (r.id === preselectId ? ' selected' : '') + '>' + esc(r.name + ' — ' + r.email + ' (' + r.code + ')') + '</option>'
     ).join('');
     openSimpleForm('Corrigir email de árbitro',
       '<p class="offline-note full">Apenas antes da ativação da conta. Se existir convite pendente ou cancelado, o anterior será invalidado e será criado um novo para o endereço corrigido. A ficha do árbitro será preservada.</p>' +
