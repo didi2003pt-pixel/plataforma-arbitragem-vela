@@ -32,7 +32,20 @@ async function openPilotRegisterReferee(inviteByDefault = true) {
   try {
     const regions = await api.get('/referees/registration-options');
     if (!regions.length) {
-      toast('Não existem regiões ativas configuradas. Contacte a administração para configurar uma região.', true);
+      if (!['FPV_ADMIN', 'ADMIN'].includes(ui.user?.role)) {
+        toast('Ainda não existem regiões ativas. Peça a um Administrador FPV que configure a primeira região antes do registo.', true);
+        return;
+      }
+      openSimpleForm('Configurar primeira região',
+        '<p class="offline-note full">É necessário criar uma região institucional antes de registar árbitros. Utilize apenas o nome e o código confirmados pela FPV; não use regiões de demonstração.</p>' +
+        '<div class="field full"><label>Nome oficial da região</label><input class="input" name="name" minlength="3" maxlength="120" required></div>' +
+        '<div class="field full"><label>Código oficial / interno da região</label><input class="input" name="code" minlength="2" maxlength="24" pattern="[A-Za-z0-9_-]+" required placeholder="Código confirmado pela FPV"></div>',
+        async f => {
+          await api.post('/referees/registration-region', { name: f.name.trim(), code: f.code.trim().toUpperCase() });
+          toast('Região configurada. Já pode registar o primeiro árbitro.');
+          await openPilotRegisterReferee(inviteByDefault);
+        }
+      );
       return;
     }
     const regionOptions = regions.map(r =>
