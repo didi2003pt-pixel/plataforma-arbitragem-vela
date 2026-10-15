@@ -10,6 +10,8 @@ root = Path(sys.argv[1] if len(sys.argv) > 1 else "/app")
 def replace(rel, old, new):
     path = root / rel
     text = path.read_text(encoding="utf-8-sig")
+    old = old.replace("\\`", "`").replace("\\${", "${")
+    new = new.replace("\\`", "`").replace("\\${", "${")
     n = text.count(old)
     if n != 1:
         raise SystemExit(f"REG-01: expected one matching section in {rel}; found {n}. Stop build.")
