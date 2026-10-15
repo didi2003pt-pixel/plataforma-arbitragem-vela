@@ -14,6 +14,14 @@ renderReferees = async function (root) {
   button.textContent = 'Registar árbitro';
   button.onclick = () => openPilotRegisterReferee();
   actions.appendChild(button);
+  if (['ARBITRATION_ADMIN', 'NATIONAL_COUNCIL', 'FPV_ADMIN', 'ADMIN'].includes(ui.user?.role)) {
+    const fixButton = document.createElement('button');
+    fixButton.className = 'btn';
+    fixButton.type = 'button';
+    fixButton.textContent = 'Corrigir email de árbitro';
+    fixButton.onclick = () => openPilotCorrectRefereeEmail();
+    actions.appendChild(fixButton);
+  }
 };
 
 const _reg01RenderUsers = renderUsers;
@@ -66,5 +74,43 @@ async function openPilotRegisterReferee(inviteByDefault = true) {
     );
   } catch (err) {
     toast(errorMessage(err), true);
+  }
+}
+
+async function openPilotCorrectRefereeEmail() {
+  try {
+    const refs = await api.get('/referees');
+    if (!refs.length) {
+      toast('Ainda não existem árbitros registados.', true);
+      return;
+    }
+    const options = refs.map(r =>
+      '<option value="' + escAttr(r.id) + '">' + esc(r.name + ' — ' + r.email + ' (' + r.code + ')') + '</option>'
+    ).join('');
+    openSimpleForm('Corrigir email de árbitro',
+      '<p class="offline-note full">Apenas antes da ativação da conta. Se existir convite pendente ou cancelado, o anterior será invalidado e será criado um novo para o endereço corrigido. A ficha do árbitro será preservada.</p>' +
+      '<div class="field full"><label>Árbitro</label><select class="select" name="refereeId" required><option value="">Selecione o árbitro…</option>' + options + '</select></div>' +
+      '<div class="field full"><label>Email correto</label><input class="input" type="email" name="newEmail" maxlength="254" autocomplete="off" required></div>',
+      async f => {
+        const selected = refs.find(r => r.id === f.refereeId);
+        if (!selected) throw new Error('Selecione um árbitro registado.');
+        const newEmail = String(f.newEmail || '').trim().toLowerCase();
+        if (!newEmail || newEmail === selected.email.toLowerCase()) throw new Error('Indique um endereço diferente do atual.');
+        if (!confirm('Confirmas o email correto para ' + selected.name + '? O convite antigo será invalidado.')) {
+          throw new Error('Correção cancelada.');
+        }
+        const result = await api.patch('/users/referees/' + encodeURIComponent(selected.id) + '/correct-invite-email', { newEmail });
+        if (!result.inviteCreated) {
+          toast('Email da ficha corrigido. Falta enviar o convite em Utilizadores → Convidar árbitro.');
+        } else if (result.emailSent === false) {
+          toast('Email corrigido e convite antigo invalidado. A mensagem não foi enviada; utilize Utilizadores → Reenviar convite.', true);
+        } else {
+          toast('Email corrigido e novo convite enviado. Confirme a receção com o árbitro.');
+        }
+        await navigate('arbitros');
+      }
+    );
+  } catch (error) {
+    toast(errorMessage(error), true);
   }
 }
