@@ -9,6 +9,8 @@ COPY patches/mail.service.ts /tmp/mail.service.ts
 RUN cp /tmp/mail.service.ts /app/src/notifications/mail.service.ts
 COPY patches/apply-reg01.py /tmp/apply-reg01.py
 RUN python3 /tmp/apply-reg01.py /app
+COPY patches/apply-reg02.py /tmp/apply-reg02.py
+RUN python3 /tmp/apply-reg02.py /app
 RUN npm install --no-audit --no-fund
 
 FROM deps AS build
