@@ -1,0 +1,24 @@
+/* REG-05: contextual, mobile-first editing; no extra toolbar buttons. */
+.reg05-name-link {
+  display:inline;padding:0;border:0;background:none;color:var(--navy);
+  font:inherit;font-weight:850;text-align:left;cursor:pointer;
+  text-decoration:underline;text-decoration-color:transparent;text-underline-offset:4px;
+}
+.reg05-name-link:hover,.reg05-name-link:focus-visible { text-decoration-color:var(--blue);color:var(--blue) }
+.reg05-name-link:focus-visible,.reg05-inline-action:focus-visible {outline:3px solid rgba(15,110,168,.22);outline-offset:4px;border-radius:4px}
+.reg05-detail-edit {background:#ecf7f8;border-color:#b8dee4;color:#076479;box-shadow:none}
+.reg05-profile-edit {width:100%;margin-top:10px;background:#f0f8fa;color:#076479;box-shadow:none;border-color:#c8e5ea}
+.reg05-email-panel {padding:14px 16px;border:1px solid #d9e8ef;border-radius:16px;background:#f7fafc;display:grid;gap:5px}
+.reg05-email-panel .reg05-label {font-size:.77rem;font-weight:850;color:var(--muted)}
+.reg05-email-panel strong {font-size:.92rem;color:var(--navy);overflow-wrap:anywhere}
+.reg05-inline-action {display:inline-flex;gap:6px;width:fit-content;padding:3px 0;border:0;background:transparent;color:#09778b;font:inherit;font-size:.88rem;font-weight:850;cursor:pointer;text-align:left;text-decoration:underline;text-underline-offset:3px}
+.reg05-form-lead {background:#f2f8fa;border-left:3px solid #17a394;padding:12px 14px;border-radius:7px;color:#496070;font-size:.89rem;line-height:1.45}
+.reg05-request-row {display:flex;flex-wrap:wrap;align-items:center;gap:6px;color:var(--muted);font-size:.86rem}
+.reg05-profile-summary {display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.reg05-profile-summary h3 {margin:0;font-size:1.15rem;color:var(--navy)}
+.reg05-round-avatar {width:54px;height:54px;flex:none;display:grid;place-items:center;border-radius:16px;background:linear-gradient(140deg,#136a98,#11a398);color:#fff;font-weight:900}
+@media(max-width:540px) {
+ .reg05-email-panel {padding:13px}
+ .reg05-profile-summary h3 {font-size:1rem}
+ .reg05-detail-edit {order:2}
+}
