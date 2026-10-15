@@ -12,6 +12,11 @@ RUN cp /tmp/mobile-fix.css /src/frontend/mobile-fix.css \
  && cp /tmp/mobile-fix.js /src/frontend/mobile-fix.js \
  && python3 /tmp/apply-mobile1.py /src/frontend
 
+COPY patches/pilot-register-referee.js /tmp/pilot-register-referee.js
+COPY patches/apply-reg01.py /tmp/apply-reg01.py
+RUN cp /tmp/pilot-register-referee.js /src/frontend/pilot-register-referee.js \
+ && python3 /tmp/apply-reg01.py /src/frontend
+
 FROM nginx:1.27-alpine
 COPY --from=fetch /src/frontend/ /usr/share/nginx/html/
 COPY --from=fetch /src/frontend/nginx.conf /etc/nginx/conf.d/default.conf
