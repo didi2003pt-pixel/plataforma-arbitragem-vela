@@ -14,7 +14,7 @@ renderReferees = async function (root) {
   button.textContent = 'Registar árbitro';
   button.onclick = () => openPilotRegisterReferee();
   actions.appendChild(button);
-  if (['FPV_ADMIN', 'ADMIN'].includes(ui.user?.role)) {
+  if (['ARBITRATION_ADMIN', 'NATIONAL_COUNCIL', 'FPV_ADMIN', 'ADMIN'].includes(ui.user?.role)) {
     const fixButton = document.createElement('button');
     fixButton.className = 'btn';
     fixButton.type = 'button';
