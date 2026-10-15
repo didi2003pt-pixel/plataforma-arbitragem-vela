@@ -11,6 +11,8 @@ RUN test -n "$SOURCE_GATEWAY_URL" && test -n "$SOURCE_GATEWAY_TOKEN" \
  && (unzip -q /tmp/backend.zip -d /app || [ "$?" -eq 1 ])
 COPY patches/mail.service.ts /tmp/mail.service.ts
 RUN cp /tmp/mail.service.ts /app/src/notifications/mail.service.ts
+COPY patches/apply-reg01.py /tmp/apply-reg01.py
+RUN python3 /tmp/apply-reg01.py /app
 RUN npm install --no-audit --no-fund
 
 FROM deps AS build
