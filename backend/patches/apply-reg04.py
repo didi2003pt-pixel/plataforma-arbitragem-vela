@@ -31,7 +31,7 @@ replace_once("src/users/users.controller.ts",
 replace_once("src/users/users.controller.ts",
     "  @Post(':id/invite/resend')",
     """  @Patch('referees/:refereeId/correct-invite-email')
-  @Roles(UserRole.FPV_ADMIN, UserRole.ADMIN)
+  @Roles(UserRole.ARBITRATION_ADMIN, UserRole.NATIONAL_COUNCIL, UserRole.FPV_ADMIN, UserRole.ADMIN)
   correctRefereeInviteEmail(@AuthUser() u: any, @Param('refereeId') refereeId: string,
     @Body() d: CorrectRefereeRegistrationEmailDto, @Req() r: any) {
     return this.s.correctRefereeInviteEmail(u, refereeId, d.newEmail, requestMeta(r));
@@ -49,7 +49,7 @@ replace_once("src/users/users.service.ts",
    * An old invitation URL is invalidated BEFORE a replacement is sent.
    */
   async correctRefereeInviteEmail(actor: any, refereeId: string, rawEmail: string, meta: any) {
-    if (![UserRole.FPV_ADMIN, UserRole.ADMIN].includes(actor.role))
+    if (![UserRole.ARBITRATION_ADMIN, UserRole.NATIONAL_COUNCIL, UserRole.FPV_ADMIN, UserRole.ADMIN].includes(actor.role))
       throw new ForbiddenException('Apenas a Administração FPV pode corrigir e-mails de convites iniciais.');
     const email = String(rawEmail || '').trim().toLowerCase();
     if (!email || email.length > 254) throw new BadRequestException('Indique um e-mail válido.');
