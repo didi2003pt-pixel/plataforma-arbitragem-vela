@@ -32,6 +32,14 @@ RUN cp /tmp/pilot-availability-areas.js /src/frontend/pilot-availability-areas.j
  && cp /tmp/pilot-availability-areas.css /src/frontend/pilot-availability-areas.css \
  && python3 /tmp/apply-avail01.py /src/frontend
 
+
+COPY patches/pilot-event-templates.js /tmp/pilot-event-templates.js
+COPY patches/pilot-event-templates.css /tmp/pilot-event-templates.css
+COPY patches/apply-event-template01.py /tmp/apply-event-template01.py
+RUN cp /tmp/pilot-event-templates.js /src/frontend/pilot-event-templates.js \
+ && cp /tmp/pilot-event-templates.css /src/frontend/pilot-event-templates.css \
+ && python3 /tmp/apply-event-template01.py /src/frontend
+
 FROM nginx:1.27-alpine
 COPY --from=fetch /src/frontend/ /usr/share/nginx/html/
 COPY --from=fetch /src/frontend/nginx.conf /etc/nginx/conf.d/default.conf
