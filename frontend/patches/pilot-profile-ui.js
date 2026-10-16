@@ -13,6 +13,20 @@ adminOpenReferee = async function (id) {
   reg05InsertEdit(id);
 };
 
+// PILOTO-REG-07 — the CA uses a different referee-detail screen.
+// Reuse its existing licence button for the complete official-data editor,
+// instead of adding another button or changing permissions.
+const reg07OriginalCouncilDetail = openCouncilReferee314;
+openCouncilReferee314 = async function (id) {
+  await reg07OriginalCouncilDetail(id);
+  if (!['ARBITRATION_ADMIN', 'NATIONAL_COUNCIL'].includes(ui.user?.role)) return;
+  const editButton = document.getElementById('editLicenseNumber314');
+  if (!editButton) return;
+  editButton.textContent = 'Editar dados';
+  editButton.classList.add('reg05-detail-edit');
+  editButton.onclick = () => reg05OpenAdminEdit(id);
+};
+
 function reg05InsertEdit(id) {
   const actions = document.getElementById('modalActions');
   if (!actions || actions.querySelector('.reg05-detail-edit')) return;
