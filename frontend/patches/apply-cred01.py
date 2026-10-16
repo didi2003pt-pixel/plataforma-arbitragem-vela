@@ -16,9 +16,9 @@ if "pilot-credentials-edit" in index:
 index=index.replace("</head>",f'  <link rel="stylesheet" href="{css}">\n</head>',1)
 index=index.replace("</body>",f'  <script src="{js}" defer></script>\n</body>',1)
 version=re.search(r"const\s+CACHE_VERSION\s*=\s*'([^']+)'\s*;",worker)
-if not version or not version.group(1).endswith("-avail01"):
+if not version or not version.group(1).endswith("-eventtype01"):
     raise SystemExit("CRED-01: unexpected PWA cache version; stop build.")
-worker=worker[:version.start(1)]+version.group(1)[:-len("-avail01")]+"-cred01"+worker[version.end(1):]
+worker=worker[:version.start(1)]+version.group(1)[:-len("-eventtype01")]+"-cred01"+worker[version.end(1):]
 if worker.count("const APP_SHELL=[")!=1:
     raise SystemExit("CRED-01: APP_SHELL mismatch; stop build.")
 worker=worker.replace("const APP_SHELL=[",f"const APP_SHELL=['{js}','{css}',",1)
