@@ -40,6 +40,11 @@ RUN cp /tmp/pilot-event-templates.js /src/frontend/pilot-event-templates.js \
  && cp /tmp/pilot-event-templates.css /src/frontend/pilot-event-templates.css \
  && python3 /tmp/apply-event-template01.py /src/frontend
 
+COPY patches/pilot-qualifications-ui.js /tmp/pilot-qualifications-ui.js
+COPY patches/apply-qual01-ui.py /tmp/apply-qual01-ui.py
+RUN cp /tmp/pilot-qualifications-ui.js /src/frontend/pilot-qualifications-ui.js \
+ && python3 /tmp/apply-qual01-ui.py /src/frontend
+
 FROM nginx:1.27-alpine
 COPY --from=fetch /src/frontend/ /usr/share/nginx/html/
 COPY --from=fetch /src/frontend/nginx.conf /etc/nginx/conf.d/default.conf
