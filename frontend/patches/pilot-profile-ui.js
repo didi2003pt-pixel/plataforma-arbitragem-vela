@@ -64,19 +64,75 @@ async function reg05OpenCouncilDetail(id) {
 async function reg05OpenAdminEdit(id) {
   try {
     const r = await api.get('/referees/' + encodeURIComponent(id));
+    const caMayValidate = ['ARBITRATION_ADMIN', 'NATIONAL_COUNCIL'].includes(ui.user?.role);
+    const originalExpiry = r.licenseValidUntil ? String(r.licenseValidUntil).slice(0, 10) : '';
+    const selectOption = (value, text, current) =>
+      '<option value="' + value + '"' + (value === current ? ' selected' : '') + '>' + text + '</option>';
+    const officialSection = caMayValidate
+      ? '<details class="reg06-official-details full"><summary>Licença e situação oficial <span class="reg06-chevron" aria-hidden="true">⌄</span></summary>' +
+        '<div class="reg06-official-content">' +
+        '<p class="offline-note full">A preencher apenas pelo Conselho de Arbitragem, depois de verificar a licença FPV. Esta secção não credencia automaticamente o árbitro.</p>' +
+        '<div class="field full"><label>N.º da licença desportiva</label><input class="input" name="licenseNumber" maxlength="60" value="' + escAttr(r.licenseNumber || '') + '"></div>' +
+        '<div class="field full"><label>Estado da licença</label><select class="select" name="licenseStatus">' +
+        selectOption('PENDING', 'Pendente', r.licenseStatus) + selectOption('VALID', 'Válida', r.licenseStatus) +
+        selectOption('EXPIRED', 'Expirada', r.licenseStatus) + selectOption('SUSPENDED', 'Suspensa', r.licenseStatus) +
+        '</select></div>' +
+        '<div class="field full"><label>Validade da licença</label><input class="input" type="date" name="licenseValidUntil" value="' + escAttr(originalExpiry) + '"></div>' +
+        '<div class="field full"><label>Situação operacional</label><select class="select" name="operationalStatus">' +
+        selectOption('CONDITIONED', 'Condicionado', r.operationalStatus) + selectOption('ACTIVE', 'Ativo', r.operationalStatus) +
+        selectOption('INACTIVE', 'Inativo', r.operationalStatus) + selectOption('SUSPENDED', 'Suspenso', r.operationalStatus) +
+        '</select></div>' +
+        '<p class="offline-note full">A credenciação da época pode ainda exigir qualificação válida e mapa de disponibilidades registado. Não marque estados válidos sem comprovação oficial.</p>' +
+        '</div></details>'
+      : '';
     openSimpleForm('Editar dados do árbitro',
       '<div class="field full"><label for="reg05Name">Nome completo</label><input id="reg05Name" class="input" name="name" minlength="3" maxlength="160" required value="' + escAttr(r.name) + '"></div>' +
       '<div class="field full"><label for="reg05Phone">Telefone (opcional)</label><input id="reg05Phone" class="input" name="phone" maxlength="50" value="' + escAttr(r.phone || '') + '"></div>' +
       '<div class="field full reg05-email-panel"><div class="reg05-label">Email de acesso</div><strong>' + esc(r.email) + '</strong>' +
       '<button class="reg05-inline-action" type="button" id="reg05EmailLink">Corrigir email do convite <span aria-hidden="true">↗</span></button>' +
-      '<p class="offline-note">A correção do email é feita separadamente, para proteger a conta e os convites emitidos.</p></div>',
+      '<p class="offline-note">A correção do email é feita separadamente, para proteger a conta e os convites emitidos.</p></div>' +
+      officialSection,
       async f => {
-        const data = {};
-        if (String(f.name).trim() !== r.name) data.name = String(f.name).trim();
-        if (String(f.phone || '').trim() !== String(r.phone || '').trim()) data.phone = String(f.phone || '').trim();
-        if (Object.keys(data).length) {
-          await api.patch('/referees/' + encodeURIComponent(id) + '/identity', data);
-          toast('Dados atualizados e alteração registada.');
+        const identity = {};
+        if (String(f.name).trim() !== r.name) identity.name = String(f.name).trim();
+        if (String(f.phone || '').trim() !== String(r.phone || '').trim()) identity.phone = String(f.phone || '').trim();
+
+        const official = {};
+        if (caMayValidate) {
+          const licenseNumber = String(f.licenseNumber || '').trim();
+          const expiry = String(f.licenseValidUntil || '');
+          const licenseStatus = String(f.licenseStatus || '');
+          const operationalStatus = String(f.operationalStatus || '');
+
+          if (licenseNumber !== String(r.licenseNumber || '').trim()) official.licenseNumber = licenseNumber;
+          if (expiry && expiry !== originalExpiry) official.licenseValidUntil = expiry;
+          if (licenseStatus !== r.licenseStatus) official.licenseStatus = licenseStatus;
+          if (operationalStatus !== r.operationalStatus) official.operationalStatus = operationalStatus;
+
+          if (licenseStatus === 'VALID' && r.licenseStatus !== 'VALID') {
+            if (!licenseNumber || !expiry) throw new Error('Para validar a licença, indique o número e a data de validade oficiais.');
+            const today = new Date().toISOString().slice(0, 10);
+            if (expiry < today) throw new Error('A data de validade indicada já passou. Não é possível marcar a licença como válida.');
+          }
+          if (operationalStatus === 'ACTIVE' && r.operationalStatus !== 'ACTIVE' && licenseStatus !== 'VALID') {
+            throw new Error('Para marcar a situação operacional como Ativo, a licença também tem de estar válida.');
+          }
+          if ((official.licenseStatus === 'VALID' || official.operationalStatus === 'ACTIVE') &&
+              !confirm('Confirma que verificaste os dados oficiais da licença e da situação do árbitro? A alteração será registada em auditoria.')) {
+            throw new Error('Validação não confirmada.');
+          }
+        }
+
+        if (Object.keys(official).length) {
+          await api.patch('/referees/' + encodeURIComponent(id), official);
+        }
+        if (Object.keys(identity).length) {
+          await api.patch('/referees/' + encodeURIComponent(id) + '/identity', identity);
+        }
+        if (Object.keys(official).length || Object.keys(identity).length) {
+          toast('Dados atualizados. Confirma agora a credenciação da época no respetivo menu.');
+        } else {
+          toast('Sem alterações a guardar.');
         }
         await navigate('arbitros');
       });
