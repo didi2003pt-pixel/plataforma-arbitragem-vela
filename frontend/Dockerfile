@@ -24,6 +24,14 @@ RUN cp /tmp/pilot-profile-ui.js /src/frontend/pilot-profile-ui.js \
  && cp /tmp/pilot-profile-ui.css /src/frontend/pilot-profile-ui.css \
  && python3 /tmp/apply-reg05.py /src/frontend
 
+
+COPY patches/pilot-availability-areas.js /tmp/pilot-availability-areas.js
+COPY patches/pilot-availability-areas.css /tmp/pilot-availability-areas.css
+COPY patches/apply-avail01.py /tmp/apply-avail01.py
+RUN cp /tmp/pilot-availability-areas.js /src/frontend/pilot-availability-areas.js \
+ && cp /tmp/pilot-availability-areas.css /src/frontend/pilot-availability-areas.css \
+ && python3 /tmp/apply-avail01.py /src/frontend
+
 FROM nginx:1.27-alpine
 COPY --from=fetch /src/frontend/ /usr/share/nginx/html/
 COPY --from=fetch /src/frontend/nginx.conf /etc/nginx/conf.d/default.conf
