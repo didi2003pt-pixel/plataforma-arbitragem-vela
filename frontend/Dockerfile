@@ -48,6 +48,9 @@ RUN cp /tmp/pilot-credentials-edit.js /src/frontend/pilot-credentials-edit.js \
  && cp /tmp/pilot-credentials-edit.css /src/frontend/pilot-credentials-edit.css \
  && python3 /tmp/apply-cred01.py /src/frontend
 
+COPY patches/apply-avail02.py /tmp/apply-avail02.py
+RUN python3 /tmp/apply-avail02.py /src/frontend
+
 FROM nginx:1.27-alpine
 COPY --from=fetch /src/frontend/ /usr/share/nginx/html/
 COPY --from=fetch /src/frontend/nginx.conf /etc/nginx/conf.d/default.conf

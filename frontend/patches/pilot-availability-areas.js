@@ -65,8 +65,10 @@ openRefereeAvailability314 = function (event, current, me, apps) {
         '<option value="' + status + '"' + (current?.status === status ? ' selected' : '') + '>' +
         ({AVAILABLE:'Disponível',CONDITIONAL:'Condicionado',UNAVAILABLE:'Indisponível'}[status]) +
         '</option>').join('') + '</select></div>' +
-    '<div class="field full"><label>Condição / observação</label><textarea class="textarea" name="notes">' +
-      esc(current?.notes || '') + '</textarea></div>' +
+    '<div class="field full"><label for="pilotAvailConditionNote">Condição / observação</label>' +
+      '<textarea id="pilotAvailConditionNote" class="textarea" name="notes" aria-describedby="pilotAvailConditionHint">' +
+      esc(current?.notes || '') + '</textarea>' +
+      '<small id="pilotAvailConditionHint" class="pilot-avail-footnote">Obrigatório se a resposta for «Condicionado».</small></div>' +
     '<div class="field full pilot-avail-area-field"><span class="pilot-avail-label">Áreas para as quais se declara disponível</span>' +
       '<p class="pilot-avail-lead">Pode selecionar mais do que uma comissão. O Conselho de Arbitragem decide posteriormente a função concreta.</p>' +
       (choices ? '<div class="pilot-avail-choices">' + choices + '</div>' :
@@ -78,7 +80,7 @@ openRefereeAvailability314 = function (event, current, me, apps) {
       const notes = String(data.get('notes') || '');
       const chosen = new Set(data.getAll('availabilityArea'));
       if (status === 'CONDITIONAL' && !notes.trim())
-        throw new Error('Indique a condição associada à sua disponibilidade.');
+        throw { status: 400, data: { message: 'Se escolher «Condicionado», indique em que condições está disponível.' } };
       if (status !== 'UNAVAILABLE' && functions.length && !chosen.size)
         throw new Error('Selecione pelo menos uma área em que está disponível.');
       const selectedFunctions = [...new Set(areas
@@ -90,6 +92,22 @@ openRefereeAvailability314 = function (event, current, me, apps) {
       await navigate('disponibilidades');
     }
   );
+  // Clear, inline validation: reportValidity() now explains the missing condition
+  // before the save handler runs. No API calls or database rules change.
+  const form = document.getElementById('genericForm');
+  const statusInput = form?.querySelector('select[name="status"]');
+  const noteInput = form?.querySelector('textarea[name="notes"]');
+  const hint = form?.querySelector('#pilotAvailConditionHint');
+  const refreshConditionHint = () => {
+    if (!statusInput || !noteInput) return;
+    const conditional = statusInput.value === 'CONDITIONAL';
+    noteInput.required = conditional;
+    if (hint) hint.textContent = conditional
+      ? 'Obrigatório: explique em que condições poderá participar.'
+      : 'Opcional para respostas «Disponível» ou «Indisponível».';
+  };
+  statusInput?.addEventListener('change', refreshConditionHint);
+  refreshConditionHint();
 };
 
 // CA: tornar explícito onde são definidas as categorias e graduações exigidas
