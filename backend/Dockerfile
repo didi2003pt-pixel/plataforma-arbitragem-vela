@@ -17,6 +17,8 @@ COPY patches/apply-reg04.py /tmp/apply-reg04.py
 RUN python3 /tmp/apply-reg04.py /app
 COPY patches/apply-reg05.py /tmp/apply-reg05.py
 RUN python3 /tmp/apply-reg05.py /app
+COPY patches/apply-qual01.py /tmp/apply-qual01.py
+RUN python3 /tmp/apply-qual01.py /app
 RUN npm install --no-audit --no-fund
 
 FROM deps AS build
