@@ -1,0 +1,10 @@
+/* PILOTO-EVENT-TEMPLATE-01 — compact, accessible preview; no extra toolbar buttons. */
+.pilot-template-preview{background:#f0f8f8;border:1px solid #cde4e2;border-radius:14px;padding:14px 15px;color:#16475b;font-size:.91rem;line-height:1.48}
+.pilot-template-preview strong{display:block;color:#123f51;font-size:.94rem}
+.pilot-template-preview ul{list-style:disc;margin:8px 0 7px 20px;padding:0}
+.pilot-template-preview li{padding:2px 0}
+.pilot-template-preview small{display:block;color:#587480;font-size:.81rem}
+.pilot-template-preview p{margin:5px 0}
+.pilot-template-footnote{padding:10px 12px;border-left:3px solid #179b90;background:#f7fafb;color:#54707e;font-size:.83rem;line-height:1.46;border-radius:5px;margin:0}
+#pilotTemplateCustomWrap[hidden]{display:none!important}
+@media(max-width:560px){.pilot-template-preview{padding:12px 13px}.pilot-template-preview li{font-size:.9rem}}
