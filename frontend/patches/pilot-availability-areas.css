@@ -1,0 +1,17 @@
+/* PILOTO-AVAIL-01 — seleção por comissão, responsiva e sem botões extra */
+.pilot-avail-area-field {display:flex;flex-direction:column;gap:9px}
+.pilot-avail-label {font-weight:800;color:#10283b}
+.pilot-avail-lead,.pilot-avail-footnote {margin:0;color:#526c7e;font-size:.88rem;line-height:1.5}
+.pilot-avail-footnote {font-size:.81rem}
+.pilot-avail-choices {display:grid;grid-template-columns:1fr;gap:9px;margin:4px 0}
+.pilot-avail-option {display:flex;align-items:flex-start;gap:13px;padding:14px 15px;border:1px solid #d2e4e8;border-radius:14px;background:#f9fcfd;cursor:pointer;transition:background .15s,border-color .15s}
+.pilot-avail-option:has(input:checked) {background:#eaf7f5;border-color:#68b8ae}
+.pilot-avail-option input {width:18px;height:18px;flex:none;margin:2px 0 0;accent-color:#078777}
+.pilot-avail-option-content {display:flex;flex-direction:column;gap:4px;min-width:0}
+.pilot-avail-option-content strong {font-size:.96rem;color:#123047;line-height:1.3}
+.pilot-avail-option-content small {font-size:.83rem;line-height:1.42;color:#5b7180}
+.pilot-avail-option:focus-within {outline:3px solid #b0d8df;outline-offset:2px}
+.pilot-avail-empty {padding:13px 15px;background:#faf5e9;border:1px solid #ebdcb6;border-radius:12px;color:#68562b;font-size:.88rem;line-height:1.5}
+.pilot-avail-team-note {margin-bottom:16px;padding:13px 15px;background:#edf8f7;border:1px solid #cee9e4;border-radius:14px;color:#124c59;font-size:.88rem;line-height:1.5}
+.pilot-avail-team-note p {margin:6px 0 0}
+@media (min-width:660px){.pilot-avail-choices{grid-template-columns:repeat(2,minmax(0,1fr))}}
