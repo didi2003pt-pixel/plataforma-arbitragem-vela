@@ -7,8 +7,8 @@ index_path=root/"index.html"
 sw_path=root/"service-worker.js"
 index=index_path.read_text(encoding="utf-8-sig")
 sw=sw_path.read_text(encoding="utf-8-sig")
-script="./pilot-profile-ui.js?v=PILOTO-REG-06"
-css="./pilot-profile-ui.css?v=PILOTO-REG-06"
+script="./pilot-profile-ui.js?v=PILOTO-REG-07"
+css="./pilot-profile-ui.css?v=PILOTO-REG-07"
 if index.count("</head>")!=1 or index.count("</body>")!=1 or index.count("pilot-register-referee.js")!=1:
     raise SystemExit("REG-05: unexpected HTML layout; stop build.")
 if script in index or css in index:
@@ -18,10 +18,10 @@ index=index.replace("</body>",f'  <script src="{script}" defer></script>\n</body
 cache=re.search(r"const\s+CACHE_VERSION\s*=\s*'([^']+)'\s*;",sw)
 if not cache or not cache.group(1).endswith("-reg04"):
     raise SystemExit("REG-05: unexpected Service Worker cache version; stop build.")
-sw=sw[:cache.start(1)]+cache.group(1)[:-len("-reg04")]+"-reg06"+sw[cache.end(1):]
+sw=sw[:cache.start(1)]+cache.group(1)[:-len("-reg04")]+"-reg07"+sw[cache.end(1):]
 if sw.count("const APP_SHELL=[")!=1:
     raise SystemExit("REG-05: missing APP_SHELL; stop build.")
 sw=sw.replace("const APP_SHELL=[",f"const APP_SHELL=['{css}','{script}',",1)
 index_path.write_text(index,encoding="utf-8",newline="\n")
 sw_path.write_text(sw,encoding="utf-8",newline="\n")
-print("REG-06 UI installed: compact edit action and profile correction request")
+print("REG-07 UI installed: compact edit action and profile correction request")
