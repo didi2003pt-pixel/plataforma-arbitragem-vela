@@ -22,3 +22,14 @@
  .reg05-profile-summary h3 {font-size:1rem}
  .reg05-detail-edit {order:2}
 }
+
+/* REG-06: the official licence settings stay quietly tucked into the referee form. */
+.reg06-official-details {margin-top:3px;border:1px solid #d6e5ea;border-radius:15px;background:#f8fbfc;overflow:hidden}
+.reg06-official-details summary {display:flex;justify-content:space-between;align-items:center;cursor:pointer;list-style:none;padding:15px 16px;font-weight:800;color:#174d65;gap:12px}
+.reg06-official-details summary::-webkit-details-marker {display:none}
+.reg06-official-details[open] summary {border-bottom:1px solid #dce9ec}
+.reg06-chevron {font-weight:900;font-size:1.3rem;transition:transform .15s}
+.reg06-official-details[open] .reg06-chevron {transform:rotate(180deg)}
+.reg06-official-content {display:grid;grid-template-columns:1fr;gap:12px;padding:15px}
+.reg06-official-content .field {min-width:0}
+.reg06-official-content .offline-note {margin:0}
